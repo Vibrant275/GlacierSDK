@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <string>
-#include "../utils/utils.h"
+#include "utils.h"
 #include "create.h"
 
 int main(int argc, char *argv[]) {
@@ -15,21 +15,10 @@ int main(int argc, char *argv[]) {
         showHelp();
     } else if (command == "create") {
 
-        if (argc < 3) {
-            displayError("No application name specified. Please specify an app name.");
-            std::cout << "\033[34m" // Blue color
-                      << "Usage: glacier create <app-name>\n"
-                      << "\033[0m"; // Reset color
-            displayInfo("For more details, check the documentation at: <website-url>");
+        if (argc > 2) {
+            displayError("Unknown option specified with create.");
             return 1;
         }
-
-          if (argc > 3) {
-            displayError("Multiple output directories specified.");
-            return 1;
-        }
-
-        std::string appName = argv[2];
 
         createNewProject();
     } else if (command == "run") {

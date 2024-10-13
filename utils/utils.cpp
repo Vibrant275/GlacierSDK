@@ -29,7 +29,7 @@ void showHelp() {
 void displayError(const std::string& message) {
     std::cout << RED_COLOR
               << "Error: " << message << "\n"
-              << RED_COLOR;
+              << RESET_COLOR << std::endl;
 }
 
 void displayInfo(const std::string& message) {
