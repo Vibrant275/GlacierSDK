@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
         }
 
         createNewProject();
+    } else if (command == "cfc") {
+        createNewProjectFromConfig(argc, argv);
     } else if (command == "run") {
         // Logic for running the project
     } else if (command == "upgrade") {
