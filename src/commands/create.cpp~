@@ -166,7 +166,7 @@ void buildForWindows() {
 
         // Set binary name and flags
         cmakeFile << "set(BINARY_NAME \"" << config.appName << "\")\n";
-        cmakeFile << "set(CMAKE_CXX_STANDARD 23)\n";
+        cmakeFile << "set(CMAKE_CXX_STANDARD 17)\n";
         cmakeFile << "add_definitions(-DUNICODE -D_UNICODE)\n\n";
 
         // Add source files

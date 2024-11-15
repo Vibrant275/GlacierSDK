@@ -1,0 +1,8 @@
+# Application Configuration
+app_name = "dfg"
+package = "fdfg"
+platforms = ["windows", "macos"]
+
+# List your project's packages or dependencies here
+[packages]
+# You can list your packages in the format: package_name = "version"

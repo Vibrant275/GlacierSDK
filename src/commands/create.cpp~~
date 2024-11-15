@@ -5,14 +5,17 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
-#include <filesystem>
 #include "utils.h"
 #include "../utils/AppConfig.cpp"
 
-AppConfig config;
+void setupProject(const AppConfig& config);
+
+void createConfigFile(const AppConfig &config);
+
+void buildForPlatform(const std::vector<std::string>& vector1);
 
 AppConfig getConfig() {
-    AppConfig appConfig;
+    AppConfig config;
 
     std::string appName;
     std::string packageName;
@@ -73,11 +76,11 @@ AppConfig getConfig() {
     }
     std::cout << "\n";
 
-    appConfig.appName = appName;
-    appConfig.package = packageName;
-    appConfig.platforms = supportedPlatforms;
+    config.appName = appName;
+    config.package = packageName;
+    config.platforms = supportedPlatforms;
 
-    return appConfig;
+    return config;
 }
 
 AppConfig getConfigFromArguments(int argc, char *argv[]) {
@@ -109,86 +112,25 @@ AppConfig getConfigFromArguments(int argc, char *argv[]) {
 }
 
 void createNewProject() {
-    config = getConfig();
-    setupProject();
+    AppConfig config = getConfig();
+    setupProject(config);
 }
 
 void createNewProjectFromConfig(int argc, char *argv[]) {
-    config = getConfigFromArguments(argc, argv);
-    setupProject();
+    AppConfig config = getConfigFromArguments(argc, argv);
+    setupProject(config);
 }
 
-void setupProject() {
-    createGlobalConfigFile();
-
-    for (const std::string& platform : config.platforms) {
-        buildForPlatform(platform);
-    }
+void setupProject(const AppConfig& config) {
+    createConfigFile(config);
+    buildForPlatform(config.platforms);
 }
 
-void buildForPlatform(const std::string& platform) {
-    if (platform == "windows") {
-        buildForWindows();
-    } else if (platform == "linux") {
-        buildForLinux();
-    } else if (platform == "macos") {
-        buildForMacOS();
-    } else {
-        std::cerr << "Unsupported platform: " << platform << std::endl;
-    }
-}
-
-void buildForMacOS() {
+void buildForPlatform(const std::vector<std::string>& vector) {
 
 }
 
-void buildForLinux() {
-
-}
-
-void buildForWindows() {
-    std::string platformDirectory = "Windows";
-    std::filesystem::create_directory(platformDirectory);
-
-    std::cout << "Creating build structure for Windows..." << std::endl;
-
-    // Create subdirectories
-    std::filesystem::create_directory(platformDirectory + "/src");
-    std::filesystem::create_directory(platformDirectory + "/include");
-    std::filesystem::create_directory(platformDirectory + "/bin");
-    std::filesystem::create_directory(platformDirectory + "/lib");
-
-    std::ofstream cmakeFile(platformDirectory + "/CMakeLists.txt");
-    if (cmakeFile.is_open()) {
-        cmakeFile << "# CMake configuration for Prismio project on Windows\n";
-        cmakeFile << "cmake_minimum_required(VERSION 3.14)\n";
-        cmakeFile << "project(Prismio LANGUAGES CXX)\n\n";
-
-        // Set binary name and flags
-        cmakeFile << "set(BINARY_NAME \"" << config.appName << "\")\n";
-        cmakeFile << "set(CMAKE_CXX_STANDARD 23)\n";
-        cmakeFile << "add_definitions(-DUNICODE -D_UNICODE)\n\n";
-
-        // Add source files
-        cmakeFile << "file(GLOB_RECURSE SOURCES src/*.cpp)\n";
-        cmakeFile << "add_executable(${BINARY_NAME} ${SOURCES})\n";
-
-        // Add include directories
-        cmakeFile << "target_include_directories(${BINARY_NAME} PRIVATE include)\n";
-
-        // Install rules
-        cmakeFile << "install(TARGETS ${BINARY_NAME} DESTINATION bin)\n";
-
-        cmakeFile.close();
-        std::cout << "CMakeLists.txt created successfully." << std::endl;
-    } else {
-        std::cerr << "Failed to create CMakeLists.txt." << std::endl;
-    }
-
-    std::cout << "Finished setting up build structure for Windows." << std::endl;
-}
-
-void createGlobalConfigFile() {
+void createConfigFile(const AppConfig &config) {
     std::ofstream configFile("config.toml");
 
     if (!configFile) {

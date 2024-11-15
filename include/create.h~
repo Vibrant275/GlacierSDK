@@ -7,7 +7,7 @@ void createNewProject();
 void createNewProjectFromConfig(int argc, char* argv[]);
 void setupProject();
 
-void createGlobalConfigFile();
+void createConfigFile();
 
 void buildForPlatform(const std::string& platform);
 

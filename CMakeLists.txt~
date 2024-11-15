@@ -1,4 +1,7 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿# CMakeList.txt : CMake project for StudioWeaveServer, include source and define
+# project specific logic here.
+#
+cmake_minimum_required(VERSION 3.8)
 
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 
@@ -8,11 +11,11 @@ if (POLICY CMP0141)
     set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif ()
 
-project("Glacier")
+if (CMAKE_VERSION VERSION_GREATER 3.12)
+    set_property(TARGET Glacier PROPERTY CXX_STANDARD 23)
+endif ()
 
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+project("Glacier")
 
 # Add subdirectories for modularity
 add_subdirectory(utils)
